@@ -1,6 +1,5 @@
 source "https://rubygems.org"
 
-git_source(:github) {|repo_name| "https://github.com/#{repo_name}" }
+git_source(:github) { "https://github.com/ilnurnasyrov/inject_context" }
 
-# Specify your gem's dependencies in inject_context.gemspec
 gemspec
