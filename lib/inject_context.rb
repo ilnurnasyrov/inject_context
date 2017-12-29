@@ -1,6 +1,8 @@
 require "inject_context/version"
 
 module InjectContext
+  MissingDependency = Class.new(StandardError)
+
   def self.[](*args)
     injection = InjectContext::Injection.dup
     injection.define_helpers(*args)
@@ -9,9 +11,17 @@ module InjectContext
 end
 
 module InjectContext::Injection
+  # Kinda dirty
   def self.included(base)
-    # Kinda dirty
-    def base.build(context = nil, *options)
+    base.instance_variable_set('@_required_context_dependencies', @required_context_dependencies)
+
+    def base.build(context = {}, *options)
+      missing_dependencies = @_required_context_dependencies - context.keys
+
+      if missing_dependencies.any?
+        raise InjectContext::MissingDependency, "You didn't provide #{ missing_dependencies }"
+      end
+
       instance = new(*options)
       instance.instance_variable_set('@_context', context)
       instance
@@ -19,6 +29,8 @@ module InjectContext::Injection
   end
 
   def self.define_helpers(*dependencies, **renamed_dependencies)
+    @required_context_dependencies = dependencies + renamed_dependencies.keys
+
     dependencies.each do |name|
       define_method(name) do
         @_context[name]

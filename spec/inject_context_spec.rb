@@ -4,6 +4,7 @@ RSpec.describe InjectContext do
   it "adds .build method" do
     klass = Class.new { include InjectContext[] }
 
+    expect(klass).to respond_to :build
     expect(klass.build).to be_instance_of klass
   end
 
@@ -28,7 +29,7 @@ RSpec.describe InjectContext do
         end
       end
 
-    expect(klass.build(nil, 1, 2).args).to eq [1, 2]
+    expect(klass.build(Container.new, 1, 2).args).to eq [1, 2]
   end
 
   it "defines getters for context" do
@@ -50,6 +51,14 @@ RSpec.describe InjectContext do
     expect(instance).to respond_to :some_repo
     expect(instance.some_repo).to eq context[:repo]
   end
+
+  it "checks container for missing dependencies" do
+    klass = Class.new { include InjectContext[:repo, app_logger: :logger] }
+
+    expect {
+      klass.build(Container.new)
+    }.to raise_error InjectContext::MissingDependency, "You didn't provide [:repo, :app_logger]"
+  end
 end
 
 class Container
@@ -58,6 +67,10 @@ class Container
   end
 
   def [](name)
-    @dependencies.fetch(name)
+    @dependencies[name]
+  end
+
+  def keys
+    @dependencies.keys
   end
 end
