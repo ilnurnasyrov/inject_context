@@ -15,24 +15,30 @@ And then execute:
     $ bundle
 
 ## Usage
-
-### Basic usage
 ```ruby
-  require 'inject_context'
-
-  class UseCase
+  class Interactor
     include InjectContext[:post_repo, app_logger: :logger]
+
+    def initialize(*options)
+      @options = options
+    end
 
     def call
       puts post_repo.inspect
       puts logger.inspect
+      puts @options.inspect
     end
   end
 
-  use_case = UseCase.provide(post_repo: "post_repo", app_logger: "app_logger").new
-  use_case.call
-  #=> "post_repo"
-  #=> "app_logger"
+  context = { post_repo: :fake_post_repo, app_logger: :fake_app_logger }
+
+  interactor = Interactor.with(context).new(:arg1, kwarg2: :val)
+  interactor.call
+
+  # output
+  :fake_post_repo
+  :fake_app_logger
+  [:arg1, {:kwarg2=>:val}]
 ```
 
 ## Development
