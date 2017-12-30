@@ -29,38 +29,10 @@ And then execute:
     end
   end
 
-  context = { post_repo: "post_repo", app_logger: "app_logger" }
-
-  UseCase.build(context).call
+  use_case = UseCase.provide(post_repo: "post_repo", app_logger: "app_logger").new
+  use_case.call
   #=> "post_repo"
   #=> "app_logger"
-```
-
-### Passing parameters to initializer
-
-```ruby
-  require 'inject_context'
-
-  class UseCase
-    include InjectContext[:post_repo, app_logger: :logger]
-
-    def initialize(*params)
-      @params = params
-    end
-
-    def call
-      puts post_repo.inspect
-      puts logger.inspect
-      puts @params.inspect
-    end
-  end
-
-  context = { post_repo: "post_repo", app_logger: "app_logger" }
-
-  UseCase.build(context, :param1, :param2).call
-  #=> "post_repo"
-  #=> "app_logger"
-  #=> [:param1, :param2]
 ```
 
 ## Development
