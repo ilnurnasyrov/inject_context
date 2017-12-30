@@ -1,5 +1,5 @@
 module InjectContext::Injection
-  def self.build(*args)
+  def self.new(*args)
     injection = self.dup
     injection.define_helpers(*args)
     injection
@@ -9,7 +9,7 @@ module InjectContext::Injection
   def self.included(base)
     base.instance_variable_set('@_required_context_dependencies', @required_context_dependencies)
 
-    def base.provide(context)
+    def base.with(context)
       missing_dependencies = @_required_context_dependencies - context.keys
 
       if missing_dependencies.any?
@@ -36,6 +36,3 @@ module InjectContext::Injection
     end
   end
 end
-
-# InjectContext::Injection.define_helpers should not work on original module
-InjectContext::Injection.freeze

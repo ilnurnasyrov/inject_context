@@ -7,6 +7,6 @@ module InjectContext
   autoload :Version, 'inject_context/version.rb'
 
   def self.[](*args)
-    InjectContext::Injection.build(*args)
+    InjectContext::Injection.new(*args)
   end
 end
