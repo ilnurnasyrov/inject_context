@@ -7,16 +7,12 @@ Simple runtime dependencies injector
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'inject_context'
+gem 'inject_context', git: 'https://github.com/ilnurnasyrov/inject_context'
 ```
 
 And then execute:
 
     $ bundle
-
-Or install it yourself as:
-
-    $ gem install inject_context
 
 ## Usage
 
