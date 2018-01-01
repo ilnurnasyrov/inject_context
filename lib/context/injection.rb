@@ -1,28 +1,26 @@
 module Context::Injection
-  def self.new(*args)
-    injection = self.dup
-    injection.define_helpers(*args)
-    injection
-  end
+  def self.new(*dependencies, **renamed_dependencies)
+    injection = dup
 
-  def self.define_helpers(*dependencies, **renamed_dependencies)
     required_context_dependencies = dependencies + renamed_dependencies.keys
 
-    define_method(:required_context_dependencies) do
+    injection.define_method(:required_context_dependencies) do
       required_context_dependencies
     end
 
-    dependencies.each do |name|
-      define_method(name) do
-        context[name]
+    dependencies.each do |dependency|
+      injection.define_method(dependency) do
+        context[dependency]
       end
     end
 
-    renamed_dependencies.each do |original_name, new_name|
-      define_method(new_name) do
-        context[original_name]
+    renamed_dependencies.each do |dependency, method_name|
+      injection.define_method(method_name) do
+        context[dependency]
       end
     end
+
+    injection
   end
 
   def within(context)
@@ -32,7 +30,7 @@ module Context::Injection
       raise Context::MissingDependency, "You didn't provide #{ missing_dependencies }"
     end
 
-    instance = self.dup
+    instance = dup
     instance.instance_variable_set('@_context', context)
     instance
   end
