@@ -1,4 +1,4 @@
-module InjectContext::Injection
+module Context::Injection
   def self.new(*args)
     injection = self.dup
     injection.define_helpers(*args)
@@ -33,7 +33,7 @@ module InjectContext::Injection
     missing_dependencies = self.class.required_context_dependencies - context.keys
 
     if missing_dependencies.any?
-      raise InjectContext::MissingDependency, "You didn't provide #{ missing_dependencies }"
+      raise Context::MissingDependency, "You didn't provide #{ missing_dependencies }"
     end
 
     @_context = context

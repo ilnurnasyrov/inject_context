@@ -1,9 +1,9 @@
-RSpec.describe InjectContext::Injection do
+RSpec.describe Context::Injection do
   let(:context) { { repo: :fake_repo, app_logger: :fake_app_logger } }
   let(:instance) { klass.new }
   let(:klass) do
     Class.new do
-      include InjectContext::Injection.new(:repo, app_logger: :logger)
+      include Context::Injection.new(:repo, app_logger: :logger)
     end
   end
 
@@ -23,7 +23,7 @@ RSpec.describe InjectContext::Injection do
     it 'checks required keys on context' do
       expect {
         instance.context = { repo: :fake_repo }
-      }.to raise_error InjectContext::MissingDependency, "You didn't provide [:app_logger]"
+      }.to raise_error Context::MissingDependency, "You didn't provide [:app_logger]"
     end
   end
 

@@ -1,17 +1,17 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "inject_context/version"
+require "context/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "inject_context"
-  spec.version       = InjectContext::VERSION
+  spec.name          = "context"
+  spec.version       = Context::VERSION
   spec.authors       = ["Ilnur Nasyrov"]
   spec.email         = ["ilnur.nasyrov.92@gmail.com"]
 
   spec.summary       = "Simple auto injector"
   spec.description   = "Simple auto injector that allows to pass dependencies in runtime"
-  spec.homepage      = "https://github.com/ilnurnasyrov/inject_context"
+  spec.homepage      = "https://github.com/ilnurnasyrov/context"
   spec.license       = "MIT"
 
   spec.metadata["allowed_push_host"] = ""

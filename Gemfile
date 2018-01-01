@@ -1,5 +1,5 @@
 source "https://rubygems.org"
 
-git_source(:github) { "https://github.com/ilnurnasyrov/inject_context" }
+git_source(:github) { "https://github.com/ilnurnasyrov/context" }
 
 gemspec

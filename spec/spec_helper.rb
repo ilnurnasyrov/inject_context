@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "inject_context"
+require "context"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

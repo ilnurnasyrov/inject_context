@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-RSpec.describe "InjectContext usage" do
+RSpec.describe "Context usage" do
   it 'adds .with that allows to provide context to instances' do
     expect {
       class Interactor
-        include InjectContext[:post_repo, app_logger: :logger]
+        include Context[:post_repo, app_logger: :logger]
 
         def initialize(*options)
           @options = options

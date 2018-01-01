@@ -1,4 +1,4 @@
-# InjectContext
+# Context
 
 Simple runtime dependencies injector
 
@@ -7,7 +7,7 @@ Simple runtime dependencies injector
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'inject_context', git: 'https://github.com/ilnurnasyrov/inject_context'
+gem 'context', git: 'https://github.com/ilnurnasyrov/context'
 ```
 
 And then execute:
@@ -17,7 +17,7 @@ And then execute:
 ## Usage
 ```ruby
   class Interactor
-    include InjectContext[:post_repo, app_logger: :logger]
+    include Context[:post_repo, app_logger: :logger]
 
     def initialize(*options)
       @options = options
@@ -49,7 +49,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/ilnurnasyrov/inject_context. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/ilnurnasyrov/context. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
 
 ## License
 
@@ -57,4 +57,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the InjectContext project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/ilnurnasyrov/inject_context/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the Context project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/ilnurnasyrov/context/blob/master/CODE_OF_CONDUCT.md).
