@@ -1,29 +1,42 @@
 RSpec.describe InjectContext::Injection do
-  let(:klass) { Class.new }
-  let(:context) { { repo: :fake_repo } }
+  let(:context) { { repo: :fake_repo, app_logger: :fake_app_logger } }
+  let(:instance) { klass.new }
+  let(:klass) do
+    Class.new do
+      include InjectContext::Injection.new(:repo, app_logger: :logger)
+    end
+  end
 
-  describe "injection" do
-    it 'adds .with method' do
-      expect(klass).not_to respond_to :with
+  describe '#context' do
+    it 'returns value of @_context' do
+      instance.instance_variable_set '@_context', context
+      expect(instance.context).to eq context
+    end
+  end
 
-      klass.include InjectContext::Injection.new
-
-      expect(klass).to respond_to :with
-
-      builder = klass.with(context)
-
-      expect(builder).to be_instance_of InjectContext::InstanceBuilder
-      expect(builder.klass).to eq klass
-      expect(builder.context).to eq context
+  describe '#context=' do
+    it 'saves values to @_context' do
+      instance.context = context
+      expect(instance.instance_variable_get '@_context').to eq context
     end
 
-    it 'defines access methods' do
-      klass.include InjectContext::Injection.new(:repo)
-
-      instance = klass.with(context).new
-
-      expect(instance).to respond_to :repo
-      expect(instance.repo).to eq :fake_repo
+    it 'checks required keys on context' do
+      expect {
+        instance.context = { repo: :fake_repo }
+      }.to raise_error InjectContext::MissingDependency, "You didn't provide [:app_logger]"
     end
+  end
+
+  describe '.required_context_dependencies' do
+    it 'returns required dependencies' do
+      expect(klass.required_context_dependencies).to eq [:repo, :app_logger]
+    end
+  end
+
+  it 'defines accessors to context' do
+    instance.context = context
+
+    expect(instance.repo).to eq context[:repo]
+    expect(instance.logger).to eq context[:app_logger]
   end
 end

@@ -5,18 +5,11 @@ module InjectContext::Injection
     injection
   end
 
-  # Kinda dirty
   def self.included(base)
     base.instance_variable_set('@_required_context_dependencies', @required_context_dependencies)
 
-    def base.with(context)
-      missing_dependencies = @_required_context_dependencies - context.keys
-
-      if missing_dependencies.any?
-        raise InjectContext::MissingDependency, "You didn't provide #{ missing_dependencies }"
-      end
-
-      InjectContext::InstanceBuilder.new(self, context)
+    def base.required_context_dependencies
+      @_required_context_dependencies
     end
   end
 
@@ -34,5 +27,19 @@ module InjectContext::Injection
         @_context[original_name]
       end
     end
+  end
+
+  def context=(context)
+    missing_dependencies = self.class.required_context_dependencies - context.keys
+
+    if missing_dependencies.any?
+      raise InjectContext::MissingDependency, "You didn't provide #{ missing_dependencies }"
+    end
+
+    @_context = context
+  end
+
+  def context
+    @_context
   end
 end

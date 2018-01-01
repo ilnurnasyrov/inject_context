@@ -19,7 +19,8 @@ RSpec.describe "InjectContext usage" do
 
       context = { post_repo: :fake_post_repo, app_logger: :fake_app_logger }
 
-      interactor = Interactor.with(context).new(:arg1, kwarg2: :val)
+      interactor = Interactor.new(:arg1, kwarg2: :val)
+      interactor.context = context
       interactor.call
     }.to output(<<~OUTPUT).to_stdout
       :fake_post_repo
