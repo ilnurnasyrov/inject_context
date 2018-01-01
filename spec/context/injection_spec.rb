@@ -14,29 +14,31 @@ RSpec.describe Context::Injection do
     end
   end
 
-  describe '#context=' do
-    it 'saves values to @_context' do
-      instance.context = context
-      expect(instance.instance_variable_get '@_context').to eq context
+  describe '#within' do
+    it 'returns dup with setted context' do
+      new_instance = instance.within(context)
+
+      expect(new_instance.context).to eq context
+      expect(instance.context).to be_nil
     end
 
     it 'checks required keys on context' do
       expect {
-        instance.context = { repo: :fake_repo }
+        instance.within(repo: :fake_repo)
       }.to raise_error Context::MissingDependency, "You didn't provide [:app_logger]"
     end
   end
 
-  describe '.required_context_dependencies' do
+  describe '#required_context_dependencies' do
     it 'returns required dependencies' do
-      expect(klass.required_context_dependencies).to eq [:repo, :app_logger]
+      expect(instance.required_context_dependencies).to eq [:repo, :app_logger]
     end
   end
 
   it 'defines accessors to context' do
-    instance.context = context
+    new_instance = instance.within(context)
 
-    expect(instance.repo).to eq context[:repo]
-    expect(instance.logger).to eq context[:app_logger]
+    expect(new_instance.repo).to eq context[:repo]
+    expect(new_instance.logger).to eq context[:app_logger]
   end
 end
