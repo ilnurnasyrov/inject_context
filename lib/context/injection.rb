@@ -2,7 +2,7 @@ module Context::Injection
   def self.new(*dependencies, **renamed_dependencies)
     injection = dup
 
-    required_context_dependencies = dependencies + renamed_dependencies.keys
+    required_context_dependencies = (dependencies + renamed_dependencies.keys).freeze
 
     injection.define_method(:required_context_dependencies) do
       required_context_dependencies
